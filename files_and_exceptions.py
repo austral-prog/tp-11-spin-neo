@@ -14,15 +14,8 @@ def read_file_to_dict(nombre_archivo):
                         else:
                             ventas_por_producto[producto] = [monto]
                     except ValueError:
-                        print(f"Valor inválido para el producto '{producto}': '{valor}'")
+                        print(f"⚠️ No se pudo convertir el valor '{valor}' a float para el producto '{producto}'")
         return ventas_por_producto
     except FileNotFoundError:
-        print(f"No se encontró el archivo '{nombre_archivo}'.")
+        print(f"❌ El archivo '{nombre_archivo}' no fue encontrado.")
         return {}
-
-def process_dict(diccionario_ventas):
-    for producto, montos in diccionario_ventas.items():
-        total = sum(montos)
-        promedio = total / len(montos) if montos else 0
-        print(f"{producto}: ventas totales ${total:.2f}, promedio ${promedio:.2f}")
-
