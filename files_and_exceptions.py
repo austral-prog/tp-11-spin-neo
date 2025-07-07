@@ -1,21 +1,31 @@
-def read_file_to_dict(nombre_archivo):
+def read_file_to_dict(filename):
     ventas_por_producto = {}
     try:
-        with open(nombre_archivo, 'r') as archivo:
-            linea = archivo.readline().strip()
+        with open(filename, 'r', encoding='utf-8') as file:
+            linea = file.readline().strip()
             ventas = linea.split(';')
+
             for venta in ventas:
-                if ':' in venta:
-                    producto, valor = venta.split(':')
+                if venta:
                     try:
-                        monto = float(valor)
+                        producto, valor = venta.split(':')
+                        valor = float(valor)
                         if producto in ventas_por_producto:
-                            ventas_por_producto[producto].append(monto)
+                            ventas_por_producto[producto].append(valor)
                         else:
-                            ventas_por_producto[producto] = [monto]
+                            ventas_por_producto[producto] = [valor]
                     except ValueError:
-                        print(f"⚠️ No se pudo convertir el valor '{valor}' a float para el producto '{producto}'")
-        return ventas_por_producto
+                        print(f"Formato incorrecto en venta: {venta}")
     except FileNotFoundError:
-        print(f"❌ El archivo '{nombre_archivo}' no fue encontrado.")
-        return {}
+        print(f"Error: el archivo '{filename}' no fue encontrado.")
+    except Exception as e:
+        print(f"Ocurrió un error inesperado: {e}")
+
+    return ventas_por_producto
+
+
+def imprimir_totales_y_promedios(ventas_por_producto):
+    for producto, montos in ventas_por_producto.items():
+        total = sum(montos)
+        promedio = total / len(montos)
+        print(f"{producto}: ventas totales ${total:.2f}, promedio ${promedio:.2f}")
