@@ -29,3 +29,10 @@ def imprimir_totales_y_promedios(ventas_por_producto):
         total = sum(montos)
         promedio = total / len(montos)
         print(f"{producto}: ventas totales ${total:.2f}, promedio ${promedio:.2f}")
+#---------------
+
+def process_dict(ventas_por_producto):
+    for producto, montos in ventas_por_producto.items():
+        total = sum(montos)
+        promedio = total / len(montos) if montos else 0
+        print(f"{producto}: ventas totales ${total:.2f}, promedio ${promedio:.2f}")
