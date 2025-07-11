@@ -1,10 +1,7 @@
-def read_file(producto):
-    
-    dicc0 = dict()
-    
+def read_file(nombre_archivo):
     ventas = {}
     try:
-        with open(producto, 'r') as archivo:
+        with open(nombre_archivo, 'r') as archivo:
             linea = archivo.readline().strip()
             items = linea.split(';')
             for item in items:
@@ -17,11 +14,19 @@ def read_file(producto):
                         ventas[producto] = [valor]
         return ventas
     except FileNotFoundError:
-        print(f"Error: el archivo '{producto}' no existe.")
+        print(f"Error: el archivo '{nombre_archivo}' no existe.")
         return {}
-    
+    except ValueError:
+        print("Error: formato incorrecto en algún valor de venta.")
+        return {}
+
+
 def process_dict(ventas):
     for producto, montos in ventas.items():
-        total = sum(montos)
-        promedio = total / len(montos)
-        print(f"{producto}: ventas totales ${total:.2f}, promedio ${promedio:.2f}")
+        if montos:  # Asegura que no haya división por cero
+            total = sum(montos)
+            promedio = total / len(montos)
+            print(f"{producto}: ventas totales ${total:.2f}, promedio ${promedio:.2f}")
+        else:
+            print(f"{producto}: sin ventas registradas.")
+
