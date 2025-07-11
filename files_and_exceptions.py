@@ -1,27 +1,27 @@
-def read_file_to_dict(filename):
-    sales_dict = {}
-    try:
-        with open(filename, 'r') as file:
-            line = file.readline().strip()
-            sales = line.split(';')
-            for item in sales:
-                if item:
-                    product, value = item.split(':')
-                    value = float(value)
-                    if product not in sales_dict:
-                        sales_dict[product] = []
-                    sales_dict[product].append(value)
-    except FileNotFoundError:
-        print(f"Error: el archivo '{filename}' no existe.")
-    except ValueError:
-        print("Error: formato incorrecto en los valores de venta.")
-    except Exception as e:
-        print(f"Ocurrió un error inesperado: {e}")
+def read_file(producto):
     
-    return sales_dict
-
-def process_dict(sales_dict):
-    for product, values in sales_dict.items():
-        total = sum(values)
-        average = total / len(values)
-        print(f"{product}: ventas totales ${total:.2f}, promedio ${average:.2f}")
+    dicc0 = dict()
+    
+    ventas = {}
+    try:
+        with open(producto, 'r') as archivo:
+            linea = archivo.readline().strip()
+            items = linea.split(';')
+            for item in items:
+                if item:
+                    producto, valor = item.split(':')
+                    valor = float(valor)
+                    if producto in ventas:
+                        ventas[producto].append(valor)
+                    else:
+                        ventas[producto] = [valor]
+        return ventas
+    except FileNotFoundError:
+        print(f"Error: el archivo '{producto}' no existe.")
+        return {}
+    
+def process_dict(ventas):
+    for producto, montos in ventas.items():
+        total = sum(montos)
+        promedio = total / len(montos)
+        print(f"{producto}: ventas totales ${total:.2f}, promedio ${promedio:.2f}")
