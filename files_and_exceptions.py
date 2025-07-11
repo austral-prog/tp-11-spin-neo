@@ -20,13 +20,11 @@ def read_file(nombre_archivo):
         print("Error: formato incorrecto en algún valor de venta.")
         return {}
 
-
 def process_dict(ventas):
     for producto, montos in ventas.items():
-        if montos:  # Asegura que no haya división por cero
+        if montos:
             total = sum(montos)
             promedio = total / len(montos)
             print(f"{producto}: ventas totales ${total:.2f}, promedio ${promedio:.2f}")
         else:
             print(f"{producto}: sin ventas registradas.")
-
