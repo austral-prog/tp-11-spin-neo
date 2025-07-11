@@ -1,38 +1,27 @@
 def read_file_to_dict(filename):
-    ventas_por_producto = {}
+    sales_dict = {}
     try:
-        with open(filename, 'r', encoding='utf-8') as file:
-            linea = file.readline().strip()
-            ventas = linea.split(';')
-
-            for venta in ventas:
-                if venta:
-                    try:
-                        producto, valor = venta.split(':')
-                        valor = float(valor)
-                        if producto in ventas_por_producto:
-                            ventas_por_producto[producto].append(valor)
-                        else:
-                            ventas_por_producto[producto] = [valor]
-                    except ValueError:
-                        print(f"Formato incorrecto en venta: {venta}")
+        with open(filename, 'r') as file:
+            line = file.readline().strip()
+            sales = line.split(';')
+            for item in sales:
+                if item:
+                    product, value = item.split(':')
+                    value = float(value)
+                    if product not in sales_dict:
+                        sales_dict[product] = []
+                    sales_dict[product].append(value)
     except FileNotFoundError:
-        print(f"Error: el archivo '{filename}' no fue encontrado.")
+        print(f"Error: el archivo '{filename}' no existe.")
+    except ValueError:
+        print("Error: formato incorrecto en los valores de venta.")
     except Exception as e:
         print(f"Ocurrió un error inesperado: {e}")
+    
+    return sales_dict
 
-    return ventas_por_producto
-
-
-def imprimir_totales_y_promedios(ventas_por_producto):
-    for producto, montos in ventas_por_producto.items():
-        total = sum(montos)
-        promedio = total / len(montos)
-        print(f"{producto}: ventas totales ${total:.2f}, promedio ${promedio:.2f}")
-#---------------
-
-def process_dict(ventas_por_producto):
-    for producto, montos in ventas_por_producto.items():
-        total = sum(montos)
-        promedio = total / len(montos) if montos else 0
-        print(f"{producto}: ventas totales ${total:.2f}, promedio ${promedio:.2f}")
+def process_dict(sales_dict):
+    for product, values in sales_dict.items():
+        total = sum(values)
+        average = total / len(values)
+        print(f"{product}: ventas totales ${total:.2f}, promedio ${average:.2f}")
